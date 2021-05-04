@@ -10,7 +10,7 @@ QAbstractTableModel 结合 QTableView 使用，是QTableView的呈现的数据�
 
 其中 data 函数用来填充QTableView 每一个单元格内容。其 role 虽为int类型，但实际的值为 Qt::ItemDataRole 枚举类型 ，如下图:
 
-![image-20210504164411469](C:\Users\MMK\AppData\Roaming\Typora\typora-user-images\image-20210504164411469.png)
+![image-1](https://github.com/mingxingren/Notes/raw/master/resource/photo/image-20210504164411469.png)
 
 简单的例子:
 
