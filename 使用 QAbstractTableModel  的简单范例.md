@@ -198,7 +198,7 @@ QVariant CTableModel::headerData(int section, Qt::Orientation orientation, int r
 }
 ```
 
-调用 CTableModel:
+使用 CTableModel 类如下:
 
 ```c++
     m_pModel = new CTableModel(ui->tableView);
@@ -218,3 +218,11 @@ QVariant CTableModel::headerData(int section, Qt::Orientation orientation, int r
     }
     m_pModel->SetContentData(vtModelData);
 ```
+
+ 该代码块对 tableview 控件设置了四列，填充了10行数据
+
+
+
+运行截图: 
+
+![image-20210504195917915](https://github.com/mingxingren/Notes/raw/master/resource/photo/image-20210504195917915.png)
