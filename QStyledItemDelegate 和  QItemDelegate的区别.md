@@ -6,7 +6,7 @@
 
 
 
-接下来查看 **QStyledItemDelegate** 和 **QItemDelegate **的 **paint**() 源码: 
+接下来查看 **QStyledItemDelegate** 和 **QItemDelegate **  的 **paint**() 源码: 
 
 ```c++
 // QStyledItemDelegate 使用 QStyle 的 drawControl 方法绘制可受到参数 widget 的样式影响
