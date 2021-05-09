@@ -130,9 +130,8 @@ void QItemDelegate::drawBackground(QPainter *painter,
 
 ```c++
     // 代码尝试对两个 TableView 的 item 进行 Qss样式渲染
-    QString sQss = "QTableView::item{ border-bottom:1px solid red;}"
-        		   "QTableView::item::selected{ color:red; "
-        									   "background:#EFF4FF;}";
+    QString sQss = "QTableView::item{ border-bottom:1px solid red; }"
+        "QTableView::item::selected{ color:red; background:#EFF4FF;}";
     m_pModel = new CTableModel(this);
     QStringList lstHeader = {"测试列"};
     m_pModel->SetHeader(lstHeader);
