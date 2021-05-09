@@ -1,12 +1,12 @@
 ## QStyledItemDelegate 和  QItemDelegate的区别
 
-**QStyledItemDelegate** 和 **QItemDelegate** 都是继承 **QAbstractItemDelegate**，官方文档上说这两个类基本一样， 唯一不同是 **QStyledItemDelegate**  可以被 **StyleSheet** 影响。
+**QStyledItemDelegate** 和 **QItemDelegate** 都是继承 **QAbstractItemDelegate**，官方文档上说这两个类基本一样， 唯一不同是 **QStyledItemDelegate**  可以被 **Qss** 影响。
 
 ![image-01](https://github.com/mingxingren/Notes/raw/master/resource/photo/image-2021050801.png)
 
 
 
-接下来查看 **QStyledItemDelegate** 和 **QItemDelegate** 的 **paint**() 源码: 
+接下来查看 **QStyledItemDelegate** 和 **QItemDelegate** 的 **paint**() 源码( Qt版本为: 6.0.3): 
 
 ```c++
 // QStyledItemDelegate 使用 QStyle 的 drawControl 方法绘制可受到参数 widget 的样式影响
@@ -121,4 +121,43 @@ void QItemDelegate::drawBackground(QPainter *painter,
     }
 }
 ```
+
+
+
+下面是使用 QItemDelegate 和 QStyledItemDelegate 时，用 Qss 渲染QTableView 出现的不同效果:
+
+调用代码:
+
+```c++
+    // 代码尝试对两个 TableView 的 item 进行 Qss样式渲染
+	QString sQss = "QTableView::item{ border-bottom:1px solid red;}"
+    			   "QTableView::item::selected{ color:red; "
+                                               "background:#EFF4FF;}";
+    m_pModel = new CTableModel(this);
+    QStringList lstHeader = {"测试列"};
+    m_pModel->SetHeader(lstHeader);
+    QVector<CTableModel::TRowData> vtModelData;
+    for (int i = 0; i < 10; i++)
+    {
+        CTableModel::TRowData tData;
+        tData.sItem1 = QString("数据%1_%2").arg(i).arg(1);
+        vtModelData.push_back(tData);
+    }
+    m_pModel->SetContentData(vtModelData);
+    ui->tvItem->setModel(m_pModel);
+    ui->tvStyleItem->setModel(m_pModel);
+
+    m_pItemDelegate = new CTableDelegate(ui->tvItem);
+    ui->tvItem->setItemDelegateForColumn(0, m_pItemDelegate);
+
+    m_pStyleItemDelegate = new CStyledTableDelegate(ui->tvStyleItem);
+    ui->tvStyleItem->setItemDelegateForColumn(0, m_pStyleItemDelegate);
+
+    ui->tvItem->setStyleSheet(sQss);
+    ui->tvStyleItem->setStyleSheet(sQss);
+```
+
+运行图如下， 左边的 **QTableView** 使用的是 **QItemDelegate**，**Qss** 样式没有效果；右边的 **QTableView** 使用的是 **QStyledItemDelegate** , 单元格有选中效果和红色下划线。
+
+![image-01](https://github.com/mingxingren/Notes/raw/master/resource/photo/image-2021050901.png)
 
