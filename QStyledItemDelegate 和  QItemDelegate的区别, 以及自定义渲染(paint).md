@@ -251,5 +251,5 @@ void CStyledTableDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
 ![image-03](https://github.com/mingxingren/Notes/raw/master/resource/photo/image-2021051003.png)
 
-可以看到只有 **QPushButton** 的 **QStyle** 对象在渲染控件的时候有 **drawControl** 的第四个参数的 **Qss** 效果。 这是为什么呢? 答案是在初始化的时候，代码只是对 **m_pbtnStyle** 这个对象设置了 **Qss**, 导致 **m_pbtnStyle->style()** 对象类型为 **QStyleSheetStyle**(这个类型在 Qt 库里不公开), 而其他对象的 **style()** 类型是 **QWindowsVistaStyle**(这个类型也不公开)。 由此可以推测只有类型是 **QStyleSheetStyle** 类型才能渲染出 **Qss** 效果。
+可以看到只有 **QPushButton** 的 **QStyle** 对象在渲染控件的时候有 **drawControl** 的第四个参数的 **Qss** 效果。 这是为什么呢? 答案是在初始化的时候，代码只是对 **m_pbtnStyle** 这个对象设置了 **Qss**, 导致 **m_pbtnStyle->style()** 对象类型为 **QStyleSheetStyle**(这个类型在 Qt 库里不公开), 而其他对象的 **style()** 类型是 **QWindowsVistaStyle**(这个类型也不公开)。 由此可以推测只有类型是 **QStyleSheetStyle** 类型才能渲染出 **Qss** 效果，只要 **m_pwgtStyle** 也设置 **Qss** 就可以渲染出带有**Qss**效果的**UI**
 
