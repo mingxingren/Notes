@@ -145,3 +145,120 @@
     
     
 
+16. Qss 选择想要选择多个同级的控件, 用逗号分割，例如:
+
+    ```css
+    QPushButton#button_1, QPushButton#button_2 { color:red; }
+    ```
+
+    
+    
+17. STL 容器在调用resize做内存扩充时, 会默认初始化 节点<T>对象，STL 源码如下:
+
+    ```C++
+    void resize(size_type __new_size)
+    {
+    	if (__new_size > size())
+    	  _M_default_append(__new_size - size());
+    	else if (__new_size < size())
+    	  _M_erase_at_end(this->_M_impl._M_start + __new_size);
+    }
+    
+    template<typename _Tp, typename _Alloc>
+    void vector<_Tp, _Alloc>::_M_default_append(size_type __n)
+    {
+      if (__n != 0)
+    	{
+    	  if (size_type(this->_M_impl._M_end_of_storage
+    					- this->_M_impl._M_finish) >= __n)
+    		{
+    		  _GLIBCXX_ASAN_ANNOTATE_GROW(__n);
+    		  this->_M_impl._M_finish =
+    			std::__uninitialized_default_n_a(this->_M_impl._M_finish,
+    											 __n, _M_get_Tp_allocator());
+    		  _GLIBCXX_ASAN_ANNOTATE_GREW(__n);
+    		}
+    	  else
+    		{
+    		  const size_type __len =
+    			_M_check_len(__n, "vector::_M_default_append");
+    		  const size_type __old_size = this->size();
+    		  pointer __new_start(this->_M_allocate(__len));
+    		  pointer __new_finish(__new_start);
+    		  __try
+    			{
+    			  __new_finish
+    				= std::__uninitialized_move_if_noexcept_a
+    				(this->_M_impl._M_start, this->_M_impl._M_finish,
+    				 __new_start, _M_get_Tp_allocator());
+    			  __new_finish =
+    				std::__uninitialized_default_n_a(__new_finish, __n,
+    												 _M_get_Tp_allocator());
+    			}
+    		  __catch(...)
+    			{
+    			  std::_Destroy(__new_start, __new_finish,
+    							_M_get_Tp_allocator());
+    			  _M_deallocate(__new_start, __len);
+    			  __throw_exception_again;
+    			}
+    		  _GLIBCXX_ASAN_ANNOTATE_REINIT;
+    		  std::_Destroy(this->_M_impl._M_start, this->_M_impl._M_finish,
+    						_M_get_Tp_allocator());
+    		  _M_deallocate(this->_M_impl._M_start,
+    						this->_M_impl._M_end_of_storage
+    						- this->_M_impl._M_start);
+    		  this->_M_impl._M_start = __new_start;
+    		  this->_M_impl._M_finish = __new_finish;
+    		  this->_M_impl._M_end_of_storage = __new_start + __len;
+    		}
+    	}
+    }
+    ```
+
+    
+    
+18. **QPlainTextEdit** 在 **minimumHeight** 设置为 **0** 后， 此时将 **QPlainTextEdit** 放入到布局中，运行后用鼠标整个窗体进行缩小, **QPlainTextEdit** 在缩小到某种程度便会停止从而撑起整个布局， 并不会缩小到 **0px**
+
+
+
+19. 在想声明成员变量都是同类型的结构体时，例如:
+
+    ```C++
+    struct T_A{
+        int a = 1;
+        int b = 2;
+        int c = 3:
+        ...
+    };
+    ```
+
+    可以用结合数组和枚举的形式，例如：
+
+    ```c++
+    enum eIndex
+    {
+    	EINDEX_a = 0,
+        EINDEX_b,
+        EINDEX_c,
+        ...
+        EINDEX_size
+    };
+    
+    int arriA[] = { 1, 2, 3 ...};
+    // 取值
+    arriA[EINDEX_a] = 10;
+    arriA[EINDEX_b] = 10;
+    arriA[EINDEX_c] = 10;
+    
+    // 这样的好处是当成员变量非常多的时候，可以使用 for 循环进行操作
+    
+    for (int i = 0; i < EINDEX_size; i++)
+    {
+        arriA[i] += 10; 
+    }
+    
+    ```
+
+    
+
