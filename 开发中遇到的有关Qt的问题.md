@@ -261,4 +261,41 @@
     ```
 
     
+    
+20. 以前在使用 **Qt** 槽函数的时候经常遇到 **signal** 名称重复的情况，例如以前 **QNetworkReply** 在比较低的版本，其信号 **error** 和 其公有方法**error** 冲突。导致并不能直接使用 **functor**式的连接，然后可以使用 **static_cast** 进行一些的转换，如下：
+
+    ```c++
+    connect(networkReply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
+        [=](QNetworkReply::NetworkError code){ /* ... */ });
+    ```
+
+    偶然发现 **QGlobal.h** 提供 **QOverload** 来简化上面例子中的写法，代码如下：
+
+    ```c++
+    connect(networkReply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+        [=](QNetworkReply::NetworkError code){ /* ... */ });
+    ```
+
+    相比于使用 **static_cast** 要理解晦涩难懂函数指针,  **QOverload** 则是隐藏了 函数指针的转换，对新手来说更容易理解，以下是 **QOverload** 的源码:
+
+    ```c++
+    template <typename... Args>
+    struct QOverload : QConstOverload<Args...>, QNonConstOverload<Args...>
+    {
+    	using QConstOverload<Args...>::of;
+    	using QConstOverload<Args...>::operator();
+    	using QNonConstOverload<Args...>::of;
+    	using QNonConstOverload<Args...>::operator();
+    	
+    	template <typename R>
+    	Q_DECL_CONSTEXPR auto operator()(R (*ptr)(Args...)) const Q_DECL_NOTHROW -> decltype(ptr)
+    	{ return ptr; }
+    	
+    	template <typename R>
+    	static Q_DECL_CONSTEXPR auto of(R (*ptr)(Args...)) Q_DECL_NOTHROW -> decltype(ptr)
+    	{ return ptr; }
+    };
+    ```
+
+    
 
