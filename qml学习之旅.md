@@ -93,14 +93,14 @@ property alias new_name : old_name
 
 Item 是所有可视化元素的基础对象，所有其他的可视化元素都继承自Item。 它自身不会有任何绘制操作，但是定义了所有可视化元素共有的属性：
 
-| Group(分组)                  | Properties（属性）                                           |      |
-| ---------------------------- | ------------------------------------------------------------ | ---- |
-| Geometry (几何属性)          | x， y （坐标）定义了元素左上角的位置，width，height(长和宽) 定义元素的显示范围，z(堆叠次序)定义元素之间的重叠顺序 |      |
-| Layout handling（布局操作）  | anchors（锚定），包括左（left），右（right），上（top），下（bottom），水平与垂直居中（vertical center，horizontal center），与margins（间距）一起定义了元素与其它元素之间的位置关系。 |      |
-| Key handling（按键操作）     | 附加属性 key (按键) 和 keyNavigation（按键定位）属性来控制按键操作，处理输入焦点（focus）可用操作 |      |
-| Transformation（转换）       | 缩放（scale）和rotate（旋转）转换，通用的x,y,z属性列表转换（transform），旋转基点设置（transformOrigin）。 |      |
-| Visual （可视化）            | 不透明度（opacity）控制透明度，visible（是否可见）控制元素是否显示，clip（裁剪）用来限制元素边界的绘制，smooth（平滑）用来提高渲染质量。 |      |
-| State definition（状态定义） | states（状态列表属性）提供了元素当前所支持的状态列表，当前属性的改变也可以使用transitions（转变）属性列表来定义状态转变动画。 |      |
+| Group(分组)                  | Properties（属性）                                           |
+| ---------------------------- | ------------------------------------------------------------ |
+| Geometry (几何属性)          | x， y （坐标）定义了元素左上角的位置，width，height(长和宽) 定义元素的显示范围，z(堆叠次序)定义元素之间的重叠顺序 |
+| Layout handling（布局操作）  | anchors（锚定），包括左（left），右（right），上（top），下（bottom），水平与垂直居中（vertical center，horizontal center），与margins（间距）一起定义了元素与其它元素之间的位置关系。 |
+| Key handling（按键操作）     | 附加属性 key (按键) 和 keyNavigation（按键定位）属性来控制按键操作，处理输入焦点（focus）可用操作 |
+| Transformation（转换）       | 缩放（scale）和rotate（旋转）转换，通用的x,y,z属性列表转换（transform），旋转基点设置（transformOrigin）。 |
+| Visual （可视化）            | 不透明度（opacity）控制透明度，visible（是否可见）控制元素是否显示，clip（裁剪）用来限制元素边界的绘制，smooth（平滑）用来提高渲染质量。 |
+| State definition（状态定义） | states（状态列表属性）提供了元素当前所支持的状态列表，当前属性的改变也可以使用transitions（转变）属性列表来定义状态转变动画。 |
 
 
 
@@ -115,4 +115,51 @@ Item 是所有可视化元素的基础对象，所有其他的可视化元素都
 一般 **QML** 使用 **anchors**（锚）对元素进行布局。其优先级比几何变化（例如：**x**、**y**、**width**、**height**）高， 这可以理解成 **QGui**
 
 中布局优先级比 **width** 和 **height** 高。
+
+
+
+### 六、声明信号和触发槽函数
+
+**QML** 和 **QWidget** 一样也有信号和槽函数，其声明方式如下：
+
+```
+signal <signalName>[([<type> <parameter name>[, ...]])]
+```
+
+调用方式：
+
+```
+// TestDialog.qml
+
+import QtQuick 2.0
+import QtQuick.Controls 2.12
+
+Dialog {
+    id: root
+    title: "TestDialog"
+    standardButtons:  Dialog.Ok | Dialog.Cancel
+    
+    signal signal_result(string result)
+
+    onAccepted: {
+        root.signal_result("accept");
+        root.close();
+    }
+    onRejected: {
+        root.signal_result("rejecct");
+        root.close();
+    }
+}
+```
+
+槽函数和 **QWidget**  上的 **ui** 文件上控件声明槽函数类似，属性名直接使用 **on +  signalName** 形式，代码如下：
+
+```qnl
+TestDialog {
+	...
+	onSignal_result:{
+		console.log(result)
+	}
+}
+```
 
