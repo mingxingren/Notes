@@ -75,4 +75,3 @@ PathView {
 #### PathLine使用
 
 **PathLine** 顾名思义描述一条直线路径，其起点是上一条路径终点。
-

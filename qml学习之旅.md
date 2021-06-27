@@ -104,13 +104,13 @@ Item 是所有可视化元素的基础对象，所有其他的可视化元素都
 
 
 
-### 四、定位元素 （Positioning Element）
+## 四、定位元素 （Positioning Element）
 
 分为：**Column**、**Row**、**Grid（栅格布局）**、**Flow（流式）**
 
 
 
-### 五、布局元素 （Layout Items）
+## 五、布局元素 （Layout Items）
 
 一般 **QML** 使用 **anchors**（锚）对元素进行布局。其优先级比几何变化（例如：**x**、**y**、**width**、**height**）高， 这可以理解成 **QGui**
 
@@ -118,7 +118,7 @@ Item 是所有可视化元素的基础对象，所有其他的可视化元素都
 
 
 
-### 六、声明信号和触发槽函数
+## 六、声明信号和触发槽函数
 
 **QML** 和 **QWidget** 一样也有信号和槽函数，其声明方式如下：
 
@@ -165,7 +165,7 @@ TestDialog {
 
 
 
-### 七、组件附加属性 和 附加信号
+## 七、组件附加属性 和 附加信号
 
 概念：***Attached properties* and *attached signal handlers* are mechanisms that enable objects to be annotated with extra properties or signal handlers that are otherwise unavailable to the object. In particular, they allow objects to access properties or signals that are specifically relevant to the individual object.**
 
