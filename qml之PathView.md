@@ -66,4 +66,12 @@ PathView {
 }
 ```
 
-可以看到，**PathView** 通过给予 **path** 属性自定义路径, 让 **item** 按 **Path{}** 定义路径分布。Path{} 提供了多个描述路径对象
+可以看到，**PathView** 通过给予 **path** 属性自定义路径, 让 **item** 按 **Path{}** 定义路径分布。Path{} 提供了多个描述路径对象，如下图：
+
+![image-01](https://raw.githubusercontent.com/mingxingren/Notes/master/resource/photo/image-2021062701.png)
+
+
+
+#### PathLine使用
+
+**PathLine** 顾名思义描述一条直线路径，其起点是上一条路径终点。
