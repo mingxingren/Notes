@@ -165,3 +165,29 @@ TestDialog {
 
 
 
+### 七、组件附加属性 和 附加信号
+
+概念：***Attached properties* and *attached signal handlers* are mechanisms that enable objects to be annotated with extra properties or signal handlers that are otherwise unavailable to the object. In particular, they allow objects to access properties or signals that are specifically relevant to the individual object.**
+
+```qml
+<AttachingType>.<propertyName>
+<AttachingType>.on<SignalName>
+```
+
+自我理解：不是很明白这个概念，使用起来像委托生成的每个组件**Item**都拥有一个 **View** 对象，用来访问 **View** 管理该**Item**一些属性。例如：**GridView** 里面的 **item**  并没有表示 自己是选中的**item** 这种属性，并且如果真这样实现是不合理，因为当要改变选中行时，你还需要去寻找之前被选中的**item**(挨个遍历)，所以 **isCurrentItem** 这个属性给 **GridView** 会好一点。
+
+附加属性使用样例：
+
+```qml
+import QtQuick 2.0
+
+ListView {
+    width: 240; height: 320
+    model: 3
+    delegate: Rectangle {
+        width: 100; height: 30
+        color: ListView.isCurrentItem ? "red" : "yellow"
+    }
+}
+```
+
