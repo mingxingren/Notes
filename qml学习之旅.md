@@ -231,7 +231,7 @@ ListView {
 | [Drawer](https://doc.qt.io/qt-5/qml-qtquick-controls2-drawer.html) | 通过手势上下左右滑，滑出抽屉控件                             |
 | [Frame](https://doc.qt.io/qt-5/qml-qtquick-controls2-frame.html) | 给一组控件增加可视边框                                       |
 | [GroupBox](https://doc.qt.io/qt-5/qml-qtquick-controls2-groupbox.html) | 给一组控件增加可视边框和标题，继承于 GroupBox                |
-| [HorizontalHeaderView](https://doc.qt.io/qt-5/qml-qtquick-controls2-horizontalheaderview.html) | 横向表头控件                                                 |
+| [HorizontalHeaderView](https://doc.qt.io/qt-5/qml-qtquick-controls2-horizontalheaderview.html) | 水平方向表头                                                 |
 | [ItemDelegate](https://doc.qt.io/qt-5/qml-qtquick-controls2-itemdelegate.html) | 基础的Item委托                                               |
 | [Label](https://doc.qt.io/qt-5/qml-qtquick-controls2-label.html) | 具有继承字体 带样式的文本标签                                |
 | [Menu](https://doc.qt.io/qt-5/qml-qtquick-controls2-menu.html) | 弹出菜单                                                     |
@@ -270,5 +270,5 @@ ListView {
 | [ToolSeparator](https://doc.qt.io/qt-5/qml-qtquick-controls2-toolseparator.html) | 用于工具栏的分割符                                           |
 | [ToolTip](https://doc.qt.io/qt-5/qml-qtquick-controls2-tooltip.html) | 提示                                                         |
 | [Tumbler](https://doc.qt.io/qt-5/qml-qtquick-controls2-tumbler.html) | 可以选择的旋转滚轮                                           |
-| [VerticalHeaderView](https://doc.qt.io/qt-5/qml-qtquick-controls2-verticalheaderview.html) | 垂直表头                                                     |
+| [VerticalHeaderView](https://doc.qt.io/qt-5/qml-qtquick-controls2-verticalheaderview.html) | 垂直方向表头                                                 |
 
