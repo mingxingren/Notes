@@ -4,7 +4,7 @@
 
 
 
-## 一、什么是 **QML**
+### 一、什么是 **QML**
 
 可能你对 **HTML** 比较熟悉，其实 **QML** 要做的事情和HTML 有些类似 —— 描述用户界面。**QML** 用于描述用户界面元素的形状和行为。用户界面能够使用 **JavaScript** 来提供修饰，或者增加更加复杂的逻辑。其结构层次：子元素从父元素上继承坐标系统，它的 **x，y** 坐标总是对应于它的父元素坐标系统。
 
@@ -43,7 +43,7 @@ Window {
 
 
 
-## **二、元素属性** （Properties）
+### **二、元素属性** （Properties）
 
 属性是可以赋予静态值或绑定到动态表达式的对象的属性。属性的值可以由其他对象读取。通常，它也可以由另一个对象修改，除非特定的 **QML** 类型明确禁止对特定属性执行此操作。
 
@@ -87,7 +87,7 @@ property alias new_name : old_name
 
 
 
-## 三、基本元素 （Basic Element）
+### 三、基本元素 （Basic Element）
 
 元素可以被分为可视化元素和非可视元素。一个可视化元素（例如矩形框Rectangle）有着几何形状并且可以在屏幕上显示。一个非可视化元素（例如计时器Timer）提供了常用的功能，通常用于操作可视化元素。
 
@@ -104,13 +104,13 @@ Item 是所有可视化元素的基础对象，所有其他的可视化元素都
 
 
 
-## 四、定位元素 （Positioning Element）
+### 四、定位元素 （Positioning Element）
 
 分为：**Column**、**Row**、**Grid（栅格布局）**、**Flow（流式）**
 
 
 
-## 五、布局元素 （Layout Items）
+### 五、布局元素 （Layout Items）
 
 一般 **QML** 使用 **anchors**（锚）对元素进行布局。其优先级比几何变化（例如：**x**、**y**、**width**、**height**）高， 这可以理解成 **QGui**
 
@@ -118,7 +118,7 @@ Item 是所有可视化元素的基础对象，所有其他的可视化元素都
 
 
 
-## 六、声明信号和触发槽函数
+### 六、声明信号和触发槽函数
 
 **QML** 和 **QWidget** 一样也有信号和槽函数，其声明方式如下：
 
@@ -165,7 +165,7 @@ TestDialog {
 
 
 
-## 七、组件附加属性 和 附加信号
+### 七、组件附加属性 和 附加信号
 
 概念：***Attached properties* and *attached signal handlers* are mechanisms that enable objects to be annotated with extra properties or signal handlers that are otherwise unavailable to the object. In particular, they allow objects to access properties or signals that are specifically relevant to the individual object.**
 
@@ -192,4 +192,83 @@ ListView {
 ```
 
 
+
+### 八、绘制组件 Canvas
+
+
+
+### 九、粒子系统
+
+
+
+### 十、Loader(动态加载)、Binding(属性绑定)、 Connections(信号动态创建)
+
+### 十一、 QML 结合 C++ 使用
+
+参考链接：https://www.cnblogs.com/linuxAndMcu/p/11961090.html
+
+
+
+### 十二、 QQuick 提供的原生控件
+
+| [AbstractButton](https://doc.qt.io/qt-5/qml-qtquick-controls2-abstractbutton.html) | 提供抽象按钮，抽象出来各种按钮通用功能                       |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [Action](https://doc.qt.io/qt-5/qml-qtquick-controls2-action.html) | 抽象用户界面操作                                             |
+| [ActionGroup](https://doc.qt.io/qt-5/qml-qtquick-controls2-actiongroup.html) | 将 Action 组合                                               |
+| [ApplicationWindow](https://doc.qt.io/qt-5/qml-qtquick-controls2-applicationwindow.html) | 支持页眉和页脚的顶级窗口                                     |
+| [BusyIndicator](https://doc.qt.io/qt-5/qml-qtquick-controls2-busyindicator.html) | 指示后台活动，例如在加载内容                                 |
+| [Button](https://doc.qt.io/qt-5/qml-qtquick-controls2-button.html) | 通过单击触发命令或响应的按钮                                 |
+| [ButtonGroup](https://doc.qt.io/qt-5/qml-qtquick-controls2-buttongroup.html) | 互斥的按钮组                                                 |
+| [CheckBox](https://doc.qt.io/qt-5/qml-qtquick-controls2-checkbox.html) | 勾选框                                                       |
+| [CheckDelegate](https://doc.qt.io/qt-5/qml-qtquick-controls2-checkdelegate.html) | 勾选框的委托                                                 |
+| [ComboBox](https://doc.qt.io/qt-5/qml-qtquick-controls2-combobox.html) | 下拉框                                                       |
+| [Container](https://doc.qt.io/qt-5/qml-qtquick-controls2-container.html) | Abstract base type providing functionality common to containers |
+| [Control](https://doc.qt.io/qt-5/qml-qtquick-controls2-control.html) | 对所有控件进行抽象                                           |
+| [DelayButton](https://doc.qt.io/qt-5/qml-qtquick-controls2-delaybutton.html) | 长按按钮                                                     |
+| [Dial](https://doc.qt.io/qt-5/qml-qtquick-controls2-dial.html) | Circular dial that is rotated to set a value                 |
+| [Dialog](https://doc.qt.io/qt-5/qml-qtquick-controls2-dialog.html) | 弹出带标准按钮和标题的窗体，用于和用户临时交互               |
+| [DialogButtonBox](https://doc.qt.io/qt-5/qml-qtquick-controls2-dialogbuttonbox.html) | 类似按钮布局，用户只需要在里面添加按钮，它会根据不同平台，对按钮进行先后顺序摆放 |
+| [Drawer](https://doc.qt.io/qt-5/qml-qtquick-controls2-drawer.html) | 通过手势上下左右滑，滑出抽屉控件                             |
+| [Frame](https://doc.qt.io/qt-5/qml-qtquick-controls2-frame.html) | 给一组控件增加可视边框                                       |
+| [GroupBox](https://doc.qt.io/qt-5/qml-qtquick-controls2-groupbox.html) | 给一组控件增加可视边框和标题，继承于 GroupBox                |
+| [HorizontalHeaderView](https://doc.qt.io/qt-5/qml-qtquick-controls2-horizontalheaderview.html) | 横向表头控件                                                 |
+| [ItemDelegate](https://doc.qt.io/qt-5/qml-qtquick-controls2-itemdelegate.html) | 基础的Item委托                                               |
+| [Label](https://doc.qt.io/qt-5/qml-qtquick-controls2-label.html) | 具有继承字体 带样式的文本标签                                |
+| [Menu](https://doc.qt.io/qt-5/qml-qtquick-controls2-menu.html) | 弹出菜单                                                     |
+| [MenuBar](https://doc.qt.io/qt-5/qml-qtquick-controls2-menubar.html) | 主窗体的菜单栏                                               |
+| [MenuBarItem](https://doc.qt.io/qt-5/qml-qtquick-controls2-menubaritem.html) | Presents a drop-down menu within a MenuBar                   |
+| [MenuItem](https://doc.qt.io/qt-5/qml-qtquick-controls2-menuitem.html) | Presents an item within a Menu                               |
+| [MenuSeparator](https://doc.qt.io/qt-5/qml-qtquick-controls2-menuseparator.html) | Separates a group of items in a menu from adjacent items     |
+| [Overlay](https://doc.qt.io/qt-5/qml-qtquick-controls2-overlay.html) | A window overlay for popups                                  |
+| [Page](https://doc.qt.io/qt-5/qml-qtquick-controls2-page.html) | 带有页头和页脚的控件                                         |
+| [PageIndicator](https://doc.qt.io/qt-5/qml-qtquick-controls2-pageindicator.html) | 类似于轮播图效果中指示控件                                   |
+| [Pane](https://doc.qt.io/qt-5/qml-qtquick-controls2-pane.html) | Provides a background matching with the application style and theme |
+| [Popup](https://doc.qt.io/qt-5/qml-qtquick-controls2-popup.html) | 弹出用户控件的基础类型                                       |
+| [ProgressBar](https://doc.qt.io/qt-5/qml-qtquick-controls2-progressbar.html) | 进度条                                                       |
+| [RadioButton](https://doc.qt.io/qt-5/qml-qtquick-controls2-radiobutton.html) | 单选按钮                                                     |
+| [RadioDelegate](https://doc.qt.io/qt-5/qml-qtquick-controls2-radiodelegate.html) | 单选按钮委托                                                 |
+| [RangeSlider](https://doc.qt.io/qt-5/qml-qtquick-controls2-rangeslider.html) | Used to select a range of values by sliding two handles along a track |
+| [RoundButton](https://doc.qt.io/qt-5/qml-qtquick-controls2-roundbutton.html) | A push-button control with rounded corners that can be clicked by the user |
+| [ScrollBar](https://doc.qt.io/qt-5/qml-qtquick-controls2-scrollbar.html) | Vertical or horizontal interactive scroll bar                |
+| [ScrollIndicator](https://doc.qt.io/qt-5/qml-qtquick-controls2-scrollindicator.html) | Vertical or horizontal non-interactive scroll indicator      |
+| [ScrollView](https://doc.qt.io/qt-5/qml-qtquick-controls2-scrollview.html) | Scrollable view                                              |
+| [Slider](https://doc.qt.io/qt-5/qml-qtquick-controls2-slider.html) | Used to select a value by sliding a handle along a track     |
+| [SpinBox](https://doc.qt.io/qt-5/qml-qtquick-controls2-spinbox.html) | Allows the user to select from a set of preset values        |
+| [SplitHandle](https://doc.qt.io/qt-5/qml-qtquick-controls2-splithandle.html) | Provides attached properties for SplitView handles           |
+| [SplitView](https://doc.qt.io/qt-5/qml-qtquick-controls2-splitview.html) | Lays out items with a draggable splitter between each item   |
+| [StackView](https://doc.qt.io/qt-5/qml-qtquick-controls2-stackview.html) | Provides a stack-based navigation model                      |
+| [SwipeDelegate](https://doc.qt.io/qt-5/qml-qtquick-controls2-swipedelegate.html) | Swipable item delegate                                       |
+| [SwipeView](https://doc.qt.io/qt-5/qml-qtquick-controls2-swipeview.html) | Enables the user to navigate pages by swiping sideways       |
+| [Switch](https://doc.qt.io/qt-5/qml-qtquick-controls2-switch.html) | 开关按钮                                                     |
+| [SwitchDelegate](https://doc.qt.io/qt-5/qml-qtquick-controls2-switchdelegate.html) | 开关按钮的委托                                               |
+| [TabBar](https://doc.qt.io/qt-5/qml-qtquick-controls2-tabbar.html) | Allows the user to switch between different views or subtasks |
+| [TabButton](https://doc.qt.io/qt-5/qml-qtquick-controls2-tabbutton.html) | 页签按钮                                                     |
+| [TextArea](https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html) | 输入文本区域（多行）                                         |
+| [TextField](https://doc.qt.io/qt-5/qml-qtquick-controls2-textfield.html) | 输入文本区域（单行）                                         |
+| [ToolBar](https://doc.qt.io/qt-5/qml-qtquick-controls2-toolbar.html) | ToolButton和相关控件的容器对象                               |
+| [ToolButton](https://doc.qt.io/qt-5/qml-qtquick-controls2-toolbutton.html) | 对话框工具按钮                                               |
+| [ToolSeparator](https://doc.qt.io/qt-5/qml-qtquick-controls2-toolseparator.html) | 用于工具栏的分割符                                           |
+| [ToolTip](https://doc.qt.io/qt-5/qml-qtquick-controls2-tooltip.html) | 提示                                                         |
+| [Tumbler](https://doc.qt.io/qt-5/qml-qtquick-controls2-tumbler.html) | 可以选择的旋转滚轮                                           |
+| [VerticalHeaderView](https://doc.qt.io/qt-5/qml-qtquick-controls2-verticalheaderview.html) | 垂直表头                                                     |
 
