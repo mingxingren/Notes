@@ -261,7 +261,7 @@
     ```
 
     
-    
+
 20. 以前在使用 **Qt** 槽函数的时候经常遇到 **signal** 名称重复的情况，例如以前 **QNetworkReply** 在比较低的版本，其信号 **error** 和 其公有方法**error** 冲突。导致并不能直接使用 **functor**式的连接，然后可以使用 **static_cast** 进行一些的转换，如下：
 
     ```c++
@@ -297,4 +297,68 @@
     };
     ```
 
+    
+
+21. **QML** 中动态创建的自定义组件方法之一, 代码如下：
+
+    ```qml
+    // 先将 自定义组件类型 转换成 组件对象，然后通过这个组件对象实例化出自定义组件对象
+    Qt.createComponent("TestWindow.qml").createObject();
+    ```
+
+22. **C++** **window**版本 **MinGW**编译器 **C++14**， 在类声明的头文件， 在类中声明 **std::array** 并初始化，代码如下:
+
+    ```c++
+    class CTestClass{
+        std::array<int, 2> arrTest = { 1, 2 };
+    };
+    
+    // 这样声明并初始化会报错，错误为: array must be initialized with a brace-enclosed initializer
+    // 在类外声明 或者 在cpp文件中声明是正常的，原因不明，看了 C++ 的官方文档，发现以前是双括号的写法，代码如下(不会报错):
+    class CTestClass{
+        std::array<int, 2> arrTest = { {1, 2} };
+    };
+    ```
+
+    
+
+23. **MySql**中的反引号是为了区分**MySql**的保留字和普通字符而引入的符号。所谓的保留字就是 **select database  insert** 等等数据库的**Sql**指令，如果需要拿这些指令作为表名和字段名时，需要加反引号 **``** 来避免编译器把这部分认为是保留字而产生错误。注: 纯数字作为字段名、表名等也需要加反引号!
+
+    
+
+24. **C++** 为保证每个实例在内存中是唯一的，编译器会给一个空类隐含的加一个字节, 保证实例化出的类是唯一的
+
+    ```C++
+    #include<iostream>
+    using namespace std
+    class a{};
+    int main()
+    { 
+        cout<<"sizeof(a)="<<sizeof(a)<<endl; 
+        return  0;
+    }
+    
+    // 输出: sizeof(a)=1
+    ```
+
+25. **Qt** 的信号和槽机制本质上是观察者模式应用，通过 **moc** (**Meta-Object Compiler** 元对象编译) 对使用 **Q_OBJECT** 宏生成 **moc** 文件里面包含 **类的描述**和**存储信号函数列表**，并且给信号函数生成定义，查看其内部就是去调用绑定这个信号的槽函数！ 在接收对象用connect 建立连接时，实际上
+
+    ```C++
+    QScopedPointer<QObjectPrivate::Connection> c(new QObjectPrivate::Connection);
+    c->sender = s;   //发送者
+    c->signal_index = signal_index;//信号索引
+    c->receiver = r;//接收者
+    c->method_relative = method_index;//槽函数索引
+    c->method_offset = method_offset;//槽函数偏移 主要是区别于多个信号
+    c->connectionType = type;//连接类型
+    c->isSlotObject = false;//是否是槽对象 默认是true
+    c->argumentTypes.store(types);//参数类型
+    c->nextConnectionList = 0;//指向下个连接对象
+    c->callFunction = callFunction;//静态回调函数，也就是qt_static_metacall
+    
+    QObjectPrivate::get(s)->addConnection(signal_index, c.data());
+    ```
+
+    到此 **Qt** 的信号和槽大致的结构便是如此，**UML** 如下：
+    
     
