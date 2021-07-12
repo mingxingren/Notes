@@ -361,4 +361,19 @@
 
     到此 **Qt** 的信号和槽大致的结构便是如此，**UML** 如下：
     
+    ![image-01](https://github.com/mingxingren/Notes/raw/master/resource/photo/image-2021071201.png)
+
+
+
+26. QCombobox 让下拉列表某项不能被选择但依然可以显示，因为 QCombobox 实际上默认拥有一个**model(QStandardItemModel)** 和一个 **QListView** 用来显示下拉列表。所以知道对 **model** 的某一项重新设置一下 **flag** 就可以了。代码 如下:
+
+    ```C++
+    QStandardItemModel* pModel = dynamic_cast<QStandardItemModel*>(ui->comboxBox->model());
+    if (pModel)
+    {
+    	// 设置第一行 为禁用和不可选中状态
+        pModel->item(0)->setFlags(pModel->item(0)->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+    }
+    ```
+
     
