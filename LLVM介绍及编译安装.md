@@ -34,9 +34,9 @@ LLVM的命名最早起源于底层语言虚拟机（Low Level Virtual Machine）
 	比较常用的编译选项：
 
   - `-DLLVM_ENABLE_PROJECTS='...'` 选择需要编译的子项目，例如：clang, clang-tools-extra, libcxx, libcxxabi, libunwind, lldb, compiler-rt, lld, polly, or cross-project-tests.
-- `-DCMAKE_INSTALL_PREFIX=directory` 项目编译好后的下载目录，默认是 `/usr/local` 
+  - `-DCMAKE_INSTALL_PREFIX=directory` 项目编译好后的下载目录，默认是 `/usr/local` 
   - `-DCMAKE_BUILD_TYPE=type` 编译类型，例如  Debug, Release, RelWithDebInfo, MinSizeRel。默认是Debug模式
-- `-DLLVM_ENABLE_ASSERTIONS=On` 编译是否断言检测（Debug模式下默认开启，其他编译默认关闭）
+  - `-DLLVM_ENABLE_ASSERTIONS=On` 编译是否断言检测（Debug模式下默认开启，其他编译默认关闭）
 
 
 
