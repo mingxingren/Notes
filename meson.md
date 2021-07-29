@@ -1,6 +1,6 @@
 ### meson是什么
 
-**Meson**是一个开源构建系统，旨在构建速度快和用户友好。
+**[Meson](https://mesonbuild.com/)**是一个开源构建系统，旨在构建速度快和用户友好。
 
 
 
@@ -26,4 +26,10 @@ $ meson test
 # 该命令是在工程目录下执行的，并非在工程目录下的编译目录执行的
 $ DESTDIR=/your-project-path/root meson install -C ./builddir
 ```
+
+
+
+参考：
+
+- https://mesonbuild.com/
 
