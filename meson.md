@@ -1,6 +1,6 @@
 ### meson是什么
 
-**[Meson](https://mesonbuild.com/)**是一个开源构建系统，旨在构建速度快和用户友好。
+[Meson](https://mesonbuild.com/)是一个开源构建系统，旨在构建速度快和用户友好。
 
 
 
