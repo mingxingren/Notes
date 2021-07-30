@@ -12,7 +12,7 @@
 - 可以在许多操作系统以及裸机交叉编译
 - 针对极快的完整和增量构建进行了优化，而不牺牲正确性 —— （原文）**optimized for extremely fast full and incremental builds without sacrificing correctness**
 - 内置的多平台依赖项提供程序，可与发行版软件包协同工作
-- 比较有意思
+- 比较有意思…
 
 
 
