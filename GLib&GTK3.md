@@ -12,7 +12,30 @@
 
 #### GObject简单声明定义
 
-GObject实现中， 类是两个结构体的组合，一个是**实例结构体**（保存所有对象私有数据），另一个是**类结构体**（保存所有对象共享的数据），声明如下：
+GObject实现中， 类是两个结构体的组合，一个是**实例结构体**（保存所有对象私有数据），另一个是**类结构体**（保存所有对象共享的数据），其结构关系图如下：
+
+![image-01](https://github.com/mingxingren/Notes/raw/master/resource/photo/image-2021080601.png)
+
+#### GObject 构造和析构大致过程
+
+构造过程：
+
+- 注册 **GObject** 类型到类型系统，此操作是在执行 **main** 函数之前，**glib**初始化过程中完成的
+- 分配内存给 **GObjectClass** 和 **GObject  structure**
+- 初始化 **GObjectClass** 结构体内存，这块内存是对象的类（类似C++类中的函数和静态变量）
+- 初始化 **GObject structure** 内存， 这块内存属于实例
+
+注意：初始化流程是在第一次调用 **g_object_new** 函数时进行的。在第二次后续调用 **g_object_new**时，它只执行两步：
+
+① 给 **GObject structure** 分配内存
+
+② 初始化内存
+
+析构过程：销毁 **GObject** 实例，内存释放，但是不会销毁 **GObjectClass**，即使所有**GObject**实例被回收，**GObjectClass**仍然存在
+
+
+
+样例声明如下：
 
 ```c
 // dlist.h 实现一个列表类
@@ -64,9 +87,17 @@ static void pm_dlist_class_init (PMDListClass *klass)
 
 GObject具有功能：
 
-- 基于引用计数的内存管理
+- 基于引用计数的内存管理 —— 结合 **g_object_ref** 和 **g_object_unref** 两个函数对引用计数进行加减
+
+  ```c
+  #define g_object_ref(Obj) ((glib_typeof (Obj)) (g_object_ref) (Obj))
+  void g_object_unref (gpointer object);
+  ```
+
 - 对象的构造函数与析构函数
+
 - 可设置对象属性的 set/get 函数
+
 - 易于使用的信号机制
 
 
@@ -90,6 +121,8 @@ GObject子类化完整的过程：
 > ④ 在 .c 文件中调用 G_DEFINE_TYPE 宏产生类型注册代码。
 
 声明的简单范例，参考地址： https://blog.csdn.net/knowledgebao/article/details/82418046
+
+https://github.com/ToshioCP/Gobject-tutorial/blob/main/gfm/sec2.md
 
 
 
