@@ -126,25 +126,6 @@
     }
     ```
 
-15. 宏定义 ’**#**‘ 和 ’**##**‘ 的使用说明: '**#**' 用于将代码转换成字符串; '**##**' 用于拼接代码; 使用范例:
-
-    ```c++
-    #include <iostream>
-    
-    #define PrintCode(x) #x
-    #define INT_TYPE(x) int##x##_t
-    
-    int main(int argc, char *argv[])
-    {
-    	std::cout << PrintCode(int) << std::endl;	// 输出: int
-    	INT_TYPE(64) a;
-    	std::cout << sizeof(a) << std::endl;	// 输出 8 因为 a是 int64_t
-    	return 0;
-    }
-    ```
-    
-    
-
 16. Qss 选择想要选择多个同级的控件, 用逗号分割，例如:
 
     ```css

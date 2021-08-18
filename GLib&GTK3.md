@@ -35,8 +35,6 @@ GObject实现中， 类是两个结构体的组合，一个是**实例结构体*
 
 
 
-
-
 样例声明如下：
 
 ```c
@@ -54,7 +52,7 @@ struct  _PMDListNode {
 
 typedef struct _PMDList PMDList;
 struct  _PMDList {
-        GObject parent_instance;
+        GObject parent_instance;	// 实例的结构体第一个成员必须是 父类的实例结构体 !!!
         PMDListNode *head;
         PMDListNode *tail;
 };
@@ -62,7 +60,7 @@ struct  _PMDList {
 typedef struct _PMDListClass PMDListClass;
 
 struct _PMDListClass {
-        GObjectClass parent_class;
+        GObjectClass parent_class;	// 类的结构体第一个成员必须是 父类的类结构体 !!!
 };
 
 GType pm_dlist_get_type (void);
@@ -128,7 +126,43 @@ https://github.com/ToshioCP/Gobject-tutorial/blob/main/gfm/sec2.md
 
 
 
-#### GObject 设置属性
+ GTypeInfo 相关实现：
+
+```c
+typedef struct _GTypeInfo  GTypeInfo;
+
+struct _GTypeInfo
+{
+  /* interface types, classed types, instantiated types */
+  guint16                class_size;
+
+  GBaseInitFunc          base_init;
+  GBaseFinalizeFunc      base_finalize;
+
+  /* interface types, classed types, instantiated types */
+  GClassInitFunc         class_init;	// 初始化 class 的静态成员，存储的是用户定义的类初始化函数
+  GClassFinalizeFunc     class_finalize;
+  gconstpointer          class_data;
+
+  /* instantiated types */
+  guint16                instance_size;	// sizeof(instance)	实例结构体大小
+  guint16                n_preallocs;
+  GInstanceInitFunc      instance_init;	// 初始化 实例结构体的成员
+
+  /* value handling */
+  const GTypeValueTable  *value_table;
+};
+```
+
+
+
+#### GObject 的属性信号
+
+在设置属性时, GObject会发出通知信号. 当要连接这个信号时, 可以指定属性名称, 使用分割符 **"::"** 将详细信息添加到信号名称中
+
+```c
+g_signal_connect (G_OBJECT (d1), "notify::value", G_CALLBACK (notify_cb), NULL);
+```
 
 
 
@@ -154,6 +188,46 @@ struct _KParentClass {
 ...
 G_DEFINE_TYPE(KbSon, kb_son, KB_TYPE_Parent);	// GType 设置成父类 其他代码一样
 ...
+```
+
+
+
+```c
+// 抽象类宏
+// Declaration of t_number_init () function.
+// Declaration of t_number_class_init () function.
+// Definition of t_number_get_type () function.
+// Definition of t_number_parent_class static variable that points the parent class.
+#define G_DEFINE_ABSTRACT_TYPE(TN, t_n, T_P)		    G_DEFINE_TYPE_EXTENDED (TN, t_n, T_P, G_TYPE_FLAG_ABSTRACT, {})
+
+// 可派生宏，例如：  G_DECLARE_DERIVABLE_TYPE (TNumber, t_number, T, NUMBER, GObject)
+// 1.声明 t_number_get_type() 函数，这个函数必须定义在.c文件。定义通常使用 G_DEFINE_TYPE 或其系列宏完成。
+// 2.定义只有 GObject 成员的实例结构体
+// 3.声明 TNumberClass，它应该之后在.h声明
+// 4.定义了 T_NUMBER（转换为实例）、T_NUMBER_CLASS（转换为类）、T_IS_NUMBER（实例检查）、T_IS_NUMBER_CLASS（类检查）和 T_NUMBER_GET_CLASS。
+// 5.g_autoptr() 支持
+#define G_DECLARE_DERIVABLE_TYPE(ModuleObjName, module_obj_name, MODULE, OBJ_NAME, ParentName) \
+  GType module_obj_name##_get_type (void);                                                               \
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS                                                                       \
+  typedef struct _##ModuleObjName ModuleObjName;                                                         \
+  typedef struct _##ModuleObjName##Class ModuleObjName##Class;                                           \
+  struct _##ModuleObjName { ParentName parent_instance; };                                               \
+                                                                                                         \
+  _GLIB_DEFINE_AUTOPTR_CHAINUP (ModuleObjName, ParentName)                                               \
+  G_DEFINE_AUTOPTR_CLEANUP_FUNC (ModuleObjName##Class, g_type_class_unref)                               \
+                                                                                                         \
+  G_GNUC_UNUSED static inline ModuleObjName * MODULE##_##OBJ_NAME (gpointer ptr) {                       \
+    return G_TYPE_CHECK_INSTANCE_CAST (ptr, module_obj_name##_get_type (), ModuleObjName); }             \
+  G_GNUC_UNUSED static inline ModuleObjName##Class * MODULE##_##OBJ_NAME##_CLASS (gpointer ptr) {        \
+    return G_TYPE_CHECK_CLASS_CAST (ptr, module_obj_name##_get_type (), ModuleObjName##Class); }         \
+  G_GNUC_UNUSED static inline gboolean MODULE##_IS_##OBJ_NAME (gpointer ptr) {                           \
+    return G_TYPE_CHECK_INSTANCE_TYPE (ptr, module_obj_name##_get_type ()); }                            \
+  G_GNUC_UNUSED static inline gboolean MODULE##_IS_##OBJ_NAME##_CLASS (gpointer ptr) {                   \
+    return G_TYPE_CHECK_CLASS_TYPE (ptr, module_obj_name##_get_type ()); }                               \
+  G_GNUC_UNUSED static inline ModuleObjName##Class * MODULE##_##OBJ_NAME##_GET_CLASS (gpointer ptr) {    \
+    return G_TYPE_INSTANCE_GET_CLASS (ptr, module_obj_name##_get_type (), ModuleObjName##Class); }       \
+  G_GNUC_END_IGNORE_DEPRECATIONS
+
 ```
 
 
@@ -199,6 +273,8 @@ guint g_signal_new (const gchar		*signal_name,
                     ...);
 
 // 连接信号和回调函数
+#define g_signal_connect(instance, detailed_signal, c_handler, data) \
+    g_signal_connect_data ((instance), (detailed_signal), (c_handler), (data), NULL, (GConnectFlags) 0)
 gulong g_signal_connect_data (gpointer	instance, const gchar	*detailed_signal,
                               GCallback	  			c_handler,
                               gpointer		  			 data,
@@ -209,7 +285,25 @@ gulong g_signal_connect_data (gpointer	instance, const gchar	*detailed_signal,
 void g_signal_emit_by_name (gpointer	instance, const gchar	*detailed_signal, ...);
 ```
 
+信号编程步骤如下：
 
+- 注册信号，信号是依附于对象的，所以注册信号是在 class_init 函数中完成的
+- 编写槽函数，在信号发出时调用该槽函数
+- 通过 `g_connnect_signal` 连接信号和槽
+- 发射信号
+
+
+
+信号处理函数（槽函数）有两个参数：
+
+- 信号所属的实例
+- 指向信号连接时给出用户数据指针
+
+
+
+### GCoroutine
+
+`GCoroutine` 并非是GLib里的一部分，它是在 `spice-gtk` 中实现的！
 
 
 
