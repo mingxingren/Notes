@@ -55,5 +55,35 @@ int main(int argc, char *argv[])
    thisline->length = this_length;
    ```
 
-   
+5. typedef 的前置声明：
+
+```cpp
+// a.h
+class object
+{
+    ...
+};
+struct myStruct
+{
+    ...
+};
+typedef object defMyObject;
+typedef myStruct defMyStruct;
+```
+
+```cpp
+// b.h
+typedef class object defMyObject;
+typedef struct myStruct defMyStruct;
+```
+
+或者：
+
+```cpp
+// b.h
+class object;
+typedef object defMyObject;
+struct myStruct;
+typedef myStruct defMyStruct;
+```
 
