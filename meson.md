@@ -29,6 +29,12 @@ $ DESTDIR=/your-project-path/root meson install -C ./builddir
 
 
 
+VSCode配置meson构建项目
+
+
+
+
+
 参考：
 
 - https://mesonbuild.com/
