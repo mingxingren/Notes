@@ -111,3 +111,35 @@ std::string Read_Image(const std::string &_csImagePath)
 }
 ```
 
+
+
+7. Windows平台`运行时库`各选项说明
+
+```text
+/MD	使此应用程序使用特定于多线程和 DLL 的运行库版本。 定义 _MT 和 _DLL，并使编译器将库名 MSVCRT.lib 放入 .obj 文件中。
+	用此选项编译的应用程序静态链接到 MSVCRT.lib。 此库提供使链接器能够解析外部引用的代码的层。 实际工作代码包含在 
+	MSVCR versionnumber.DLL，该代码必须可运行时提供给与 MSVCRT.lib 链接的应用程序。
+	
+	
+/MDd	定义 _DEBUG、_MT 和 _DLL，并使此应用程序使用特定于多线程和 DLL 的调试版本的运行库。 它还会让编译器将库 
+		MSVCRTD.lib 放入 .obj 文件中。
+		
+		
+/MT	使此应用程序使用运行库的多线程的静态版本。 定义 _MT，并使编译器将库名 LIBCMT.lib 放入 .obj 文件中，以便链接器 				LIBCMT.lib 解析外部符号。
+
+
+/MTd	定义 _DEBUG 和 _MT。 此选项还会让编译器将库名称 LIBCMTD.lib 放置到 .obj 文件中，以便链接器将使用 LIBCMTD.lib 来 		   解析外部符号。
+
+/LD	创建一个 DLL。将 /DLL 选项传递给链接器。 链接器查找 DllMain 函数，但并不需要该函数。 如果没有编写 DllMain 函数，则链接	  器将插入返回 TRUE 的 DllMain 函数。链接 DLL 启动代码。如果未在命令行上指定导出 (.exp) 文件，则创建导入库 (.lib)。 将导	   入库链接到调用 DLL 的应用程序。将 /Fe (NAME EXE) 解释为命名 DLL，而不是.exe文件。 默认情况下，程序名称变
+	basename.dll 而不是 basename.exe。
+	表示 /MT， 除非显式指定 /MD。
+
+/LDd	创建调试 DLL。 定义 _MT 和 _DEBUG。
+```
+
+Windows平台的单线程和多线程运行库的区别在于，以前系统库有分只能用于单线程应用程序的库和可以跑在多线程模式下的库，所以在连接的时候需要指定单线程还是多线程。目前单线程选项已经弃用。
+
+
+
+8. **虽然C++的编译器对变量有默认的初始化（默认都是初始化0），但是在声明变量的时候一定要显式地赋值，这并不代表不赋值会造成编译或者运行错误，而是这是一个良好的习惯，帮助你注意到每一个变量，注意结构体中每一个成员变量！！！**
+
