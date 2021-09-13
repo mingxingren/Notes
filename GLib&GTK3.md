@@ -309,6 +309,33 @@ void g_signal_emit_by_name (gpointer	instance, const gchar	*detailed_signal, ...
 
 ## GTK
 
+##### GTK组件：
+
+GTK —— 图形界面的工具包
+
+GDK —— 窗口系统的底层抽象
+
+GSK —— 底层场景图和3D渲染API
+
+Pango —— 支持Unicode国际文本渲染
+
+Cairo —— 基于矢量的高质量2D图形渲染
+
+ATK —— 复制工具包，用于实现对屏幕阅读器和其他工具的支持（仅限GTK3）
+
+原文如下：
+
+> - [GTK](https://docs.gtk.org/gtk4/) — Widget toolkit for graphical interfaces
+> - [GDK](https://docs.gtk.org/gdk4/) — Low-level abstraction for the windowing system
+> - [GSK](https://docs.gtk.org/gsk4/) — Low-level scene graph and 3D rendering API
+> - [Pango](https://docs.gtk.org/Pango/) — International text rendering with full Unicode support
+> - [Cairo](https://www.cairographics.org/manual/) — 2D, vector-based drawing for high-quality graphics
+> - [ATK](https://docs.gtk.org/atk/) — Accessibility toolkit to implement support for screen readers and other tools (GTK3 only)
+
+
+
+
+
 **GtkApplication**
 
 用于处理GTK+初始化、应用程序唯一性、会话管理，通过导出操作和菜单提供一些基本的脚本能力和桌面shell集成，并管理一个顶级窗口列表，其生命周期自动绑定到应用程序的生命周期。
