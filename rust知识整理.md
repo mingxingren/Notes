@@ -123,3 +123,62 @@ let b_mut_ptr = b as *mut T;
 
 参考：https://zhuanlan.zhihu.com/p/144325440
 
+异步测试代码：
+
+```Rust
+// 此代码可以使task1 和 task2并发执行，根据 rust tokio调度器进行调度
+
+#[tokio::main]		// basic_scheduler threaded_scheduler 
+async fn main() -> Result<(), Box<dyn Error>> {
+    // task1
+    tokio::spawn(async move {
+        println!("########## {} current thread: {:?}", 1, std::thread::current().id());
+        tokio::time::sleep(Duration::from_millis(3000)).await;
+        println!("########## {} currnet end", 1);
+    });
+
+    // 此处休眠给 task1 进入 await状态时间, 交出它所在线程的执行权, 
+    // 使得task1和task2在同一个线程并发执行. 若不加，可能两个任务会
+    // 分别在不同的线程中执行
+    tokio::time::sleep(Duration::from_millis(200)).await;
+
+    // task2
+    tokio::spawn(async move {
+        println!("########## {} current thread: {:?}", 2, std::thread::current().id());
+        tokio::time::sleep(Duration::from_millis(1000)).await;
+        println!("########## {} current end", 2);
+    });
+
+    tokio::time::sleep(Duration::from_millis(10000)).await;
+    Ok(())
+}
+```
+
+
+
+10. Box 可以在堆上申请内存，当我们想解除 Box 获取内存时代码如下：
+
+    ```rust
+    let box_data_raw_ptr = Box::into_raw(box_data);
+    ```
+
+    使用此方法后，Box 变量变回失效，不能再使用。
+
+    如果想把一块无人管理的内存转给 Box 管理，代码如下：
+
+    ```rust
+    let box_data_raw_ptr = Box::into_raw(box_data);
+    let box_data_ptr = unsafe { Box::from_raw(box_data_raw_ptr) };
+    ```
+
+    
+
+11. Rust **mod关键字**作用：
+
+    ① 在当前目录下寻找 **xxx.rs** 文件。因为一个 rust 文件可以看成一个 module.
+
+    ② 在当前目录下寻找 **xxx/mod.rs** 文件。此时 services 可以看做是一个命名空间.
+
+
+
+12.  Rust **Cell** 和 **RefCell** 的作用就是在提供结构体在不可变的时候，可以修改其中的某个成员.
