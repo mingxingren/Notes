@@ -178,3 +178,62 @@ auto func = [data = std::move(data)]() {
 };
 ```
 
+
+
+11. **SDL**库中**SDL_Event**是一个很精妙的联合结构（**union**）, 众所周知，**union**（联合）同时只能初始化一个成员。但是在使用过程中，我们却可以同时访问它的 **type** 成员 和 其他一个事件结构体。代码如下：
+
+```c
+SDL_Event user_event;
+
+user_event.type = SDL_USEREVENT;
+user_event.user.code = 2;
+user_event.user.data1 = NULL;
+user_event.user.data2 = NULL;
+SDL_PushEvent(&user_event);
+```
+
+​	可以这样做的原因是因为 **SDL_Event** 其他事件结构体都统一的将第一个成员声明为 **Uint32 type** ,  这样直接访问 **SDL_Event.type** 就可以访问到对应事件结构体的 **type** 成员。其他的事件结构体例如：
+
+```c
+/**
+ *  \brief Keyboard button event structure (event.key.*)
+ */
+typedef struct SDL_KeyboardEvent
+{
+    Uint32 type;        /**< ::SDL_KEYDOWN or ::SDL_KEYUP */
+    Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
+    Uint32 windowID;    /**< The window with keyboard focus, if any */
+    Uint8 state;        /**< ::SDL_PRESSED or ::SDL_RELEASED */
+    Uint8 repeat;       /**< Non-zero if this is a key repeat */
+    Uint8 padding2;
+    Uint8 padding3;
+    SDL_Keysym keysym;  /**< The key that was pressed or released */
+} SDL_KeyboardEvent;
+
+/**
+ *  \brief Mouse motion event structure (event.motion.*)
+ */
+typedef struct SDL_MouseMotionEvent
+{
+    Uint32 type;        /**< ::SDL_MOUSEMOTION */
+    Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
+    Uint32 windowID;    /**< The window with mouse focus, if any */
+    Uint32 which;       /**< The mouse instance id, or SDL_TOUCH_MOUSEID */
+    Uint32 state;       /**< The current button state */
+    Sint32 x;           /**< X coordinate, relative to window */
+    Sint32 y;           /**< Y coordinate, relative to window */
+    Sint32 xrel;        /**< The relative motion in the X direction */
+    Sint32 yrel;        /**< The relative motion in the Y direction */
+} SDL_MouseMotionEvent;
+
+// SDL_Event 结构如下
+typedef union SDL_Event
+{
+    Uint32 type;                            /**< Event type, shared with all events */
+    SDL_CommonEvent common;                 /**< Common event data */
+    SDL_DisplayEvent display;               /**< Display event data */
+	...;
+    Uint8 padding[sizeof(void *) <= 8 ? 56 : sizeof(void *) == 16 ? 64 : 3 * sizeof(void *)];
+} SDL_Event;
+```
+
