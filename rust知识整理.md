@@ -94,6 +94,9 @@ unsafe {
     // 使用 Vec::from_raw_parts 不会发生拷贝，该块内存的所有权会被 data 接管
     let data = Vec::from_raw_parts(data_ptr, size, size);
 }
+
+// &[u8] 转换成 * const u8
+let ptr = data.as_ptr()
 ```
 
 
@@ -154,6 +157,32 @@ async fn main() -> Result<(), Box<dyn Error>> {
 }
 ```
 
+```Rust
+// 单线程异步代码块
+async fn do_stuff_async() -> Result<(), &'static str> {
+    println!("########## {} current thread: {:?}", 1, std::thread::current().id());
+    tokio::time::sleep(Duration::from_millis(3000)).await;
+    println!("########## {} currnet end", 1);
+    Ok(())
+}
+
+async fn more_async_work() -> Result<(), &'static str> {
+    println!("########## {} current thread: {:?}", 2, std::thread::current().id());
+    tokio::time::sleep(Duration::from_millis(1000)).await;
+    println!("########## {} current end", 2);
+    Ok(())
+}
+
+#[tokio::main]
+async fn main(){
+    // let a = do_stuff_async();
+    // let b = more_async_work();
+    tokio::try_join!(do_stuff_async(), more_async_work());
+}
+```
+
+
+
 
 
 10. Box 可以在堆上申请内存，当我们想解除 Box 获取内存时代码如下：
@@ -182,3 +211,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
 
 12.  Rust **Cell** 和 **RefCell** 的作用就是在提供结构体在不可变的时候，可以修改其中的某个成员.
+
+
+
+13. 整形转成枚举类型方法：https://enodev.fr/posts/rusticity-convert-an-integer-to-an-enum.html
