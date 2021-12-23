@@ -73,6 +73,8 @@ https://antongerdelan.net/opengl/index.html#onlinetuts
 
 
 
+
+
 ### OpenGL 调用流程
 
 1. 着色器创建流程
@@ -106,5 +108,44 @@ e=>end
 st->op_1->op_2->op_3->op_4->cond
 cond(yes)->op_5->e
 cond(no)->op_6->e
+```
+
+3. 申请顶点队列对象(VAO)、顶点缓冲对象(VBO)、索引缓冲对象(EBO)
+
+   ```flow
+   st=>start: Start
+   op_1=>operation: glGenVertexArrays 申请顶点队列对象(VAO)
+   op_2=>operation: glGetBuffer 创建VBO(顶点缓冲对象) EBO(索引缓冲对象)等缓冲对象
+   op_3=>operation: glBindVertexArray 将当前执行对象绑定到VAO
+   op_4=>operation: glBindData 将VBO绑定到VAO上,并将当前操作对象指向VBO
+   op_5=>operation: glBufferData 对VBO EBO填入数据
+   op_6=>operation: glVertexAttribPointer 将location id 绑定到当前的 VBO 缓存
+   op_7=>operation: glDrawElements 根据 EBO 画出图形
+   e=>end: End
+   st->op_1->op_2->op_3->op_4->op_5->op_6->op_7->e
+   ```
+
+   4. 使用 texture(纹理) 流程
+   
+   ```flow
+   st=>start: Start
+   op_1=>operation: glGenTextures 申请 texture 对象
+   op_2=>operation: glBindTexture 绑定当前需要操作的 texture
+   op_3=>operation: glTexParameteri 设置 texture 属性?
+   op_4=>operation: glTexImage2D 对 texture 填入数据
+   op_5=>operation: glGenerateMipmap 生成 mipmap https://zh.wikipedia.org/wiki/Mipmap
+   op_6=>operation: glUniform1i 特殊用法: 将 片段着色器中 texture变量 指定为对应的纹理单元
+   op_7=>operation: glActiveTexture 激活纹理单元例如:GL_TEXTURE0, 并设置成当前操作的纹理单元
+   op_8=>operation: glBindTexture 将我们申请的texture对象绑定到当前的纹理单元中
+   e=>end: End
+   st->op_1->op_2->op_3->op_4->op_5->op_6->op_7->op_8->e
+   ```
+
+片段着色器中的变量和我们程序申请的texture资源是通过纹理单元进行传值的. 其关系大致为：
+
+```sequence
+fs texture变量->texture unit: 绑定对应的纹理单元
+程序 texture对象资源->texture unit: 程序申请的texture资源输入到纹理单元
+texture unit->fs texture变量: 映射
 ```
 
