@@ -42,6 +42,8 @@ CPU数据通过OpenGL缓冲区发送到GPU
 
 ![image-02](https://github.com/mingxingren/Notes/raw/master/resource/photo/image-2021123002.png)
 
+#### [glsl支持的数据类型](https://github.com/qyvlik/GLSL.qml/blob/master/glsl/GLSL%E5%8F%98%E9%87%8F%E5%92%8C%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.md)
+
 
 
 
