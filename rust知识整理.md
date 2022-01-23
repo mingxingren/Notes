@@ -215,3 +215,33 @@ async fn main(){
 
 
 13. 整形转成枚举类型方法：https://enodev.fr/posts/rusticity-convert-an-integer-to-an-enum.html
+
+
+
+14.  将一块内存映射成对应的结构，使用 **std::mem::transmute_copy** , 代码如下：
+
+    ```Rust
+    use std::mem;
+    
+    #[repr(packed)]
+    struct Foo {
+        bar: u8,
+    }
+    
+    let foo_array = [10u8];
+    
+    unsafe {
+        let mut foo_struct: Foo = mem::transmute_copy(&foo_array);
+        assert_eq!(foo_struct.bar, 10);
+        
+        foo_struct.bar = 20;
+        assert_eq!(foo_struct.bar, 20);
+    }
+    assert_eq!(foo_array, [10]);
+    
+    ```
+
+    
+
+15. Rustup - Rust工具链安装器，参考: [Rust工具链安装器](https://zhuanlan.zhihu.com/p/382810160)
+
