@@ -245,3 +245,21 @@ async fn main(){
 
 15. Rustup - Rust工具链安装器，参考: [Rust工具链安装器](https://zhuanlan.zhihu.com/p/382810160)
 
+
+
+16.  Rust 编写样例代码，参考: http://xion.io/post/code/rust-examples.html
+
+
+
+17.  Rust Cargo 命令行，参考: https://doc.rust-lang.org/cargo/commands/cargo-new.html
+
+
+
+18.  Rust 打印 [u8] 以16进制显示:
+
+    ```rust
+    println!("{:X?}", data);
+    ```
+
+    
+

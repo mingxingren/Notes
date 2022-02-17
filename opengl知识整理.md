@@ -89,7 +89,7 @@ cond(yes)->op_5->e
 cond(no)->op_6->e
 ```
 
-3. 申请顶点队列对象(VAO)、顶点缓冲对象(VBO)、索引缓冲对象(EBO)
+3. 申请顶点队列对象(VAO)、顶点缓冲对象(VBO)、索引缓冲对象(EBO), 细节参考: (https://blog.csdn.net/xiji333/article/details/114934590)
 
    ```flow
    st=>start: Start
@@ -104,8 +104,25 @@ cond(no)->op_6->e
    st->op_1->op_2->op_3->op_4->op_5->op_6->op_7->e
    ```
 
-   4. 使用 texture(纹理) 流程
+   ​	注：顶点缓冲区使用步骤：
+
+   ​	
+
+   ```flow
+   st=>start: Start
+   op_1=>operation: 获取缓冲区标识: glGenBuffers(GLsizei n, GLuint* buffers);
+   op_2=>operation: 绑定缓冲区对象: glBindBuffer(GLenum target, GLuint buffer);
+   op_3=>operation: 用数据填充缓冲区: glBufferData(GLenum target, GLsizeiptr size, const void* data, GLenum usage)
+   op_4=>operation: 更新缓冲数据: glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void*  data);
+   op_5=>operation: 清楚缓冲区对象 glDeleteBuffers(GLsizei n, const GLuint* buffers);
+   e=>end: End
+   st->op_1->op_2->op_3->op_4->op_5->e
+   ```
+
    
+
+   4. 使用 texture(纹理) 流程
+
    ```flow
    st=>start: Start
    op_1=>operation: glGenTextures 申请 texture 对象
@@ -127,6 +144,10 @@ fs texture变量->texture unit: 绑定对应的纹理单元
 程序 texture对象资源->texture unit: 程序申请的texture资源输入到纹理单元
 texture unit->fs texture变量: 映射
 ```
+
+注: OpenGL CPU像素数据向GPU纹理传输细节 —— [glPixelStorei](https://www.cnblogs.com/dongguolei/p/11982230.html)
+
+注:  glActiveTexture 激活纹理单元后，调用 glBindTexture 会将 纹理绑定到纹理单元，此时如果再调用 glBindTexture 去操作其他纹理，那当前活跃的纹理单元就绑定为其他的纹理。故在要使用纹理的时候，一定要先 glActiveTexture 然后再 glBindTexture 。
 
 
 

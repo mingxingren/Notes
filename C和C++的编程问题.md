@@ -1,4 +1,4 @@
-1. 宏定义 ’**#**‘ 和 ’**##**‘ 的使用说明: '**#**' 用于将代码转换成字符串; '**##**' 用于拼接代码; 使用范例:
+宏定义 ’**#**‘ 和 ’**##**‘ 的使用说明: '**#**' 用于将代码转换成字符串; '**##**' 用于拼接代码; 使用范例:
 
 ```c++
 #include <iostream>
@@ -235,5 +235,11 @@ typedef union SDL_Event
 	...;
     Uint8 padding[sizeof(void *) <= 8 ? 56 : sizeof(void *) == 16 ? 64 : 3 * sizeof(void *)];
 } SDL_Event;
+```
+
+12. ​	MinGW 编译windows 静态库参数：
+
+```shell
+-static -static-libgcc -static-libstdc++
 ```
 
