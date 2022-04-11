@@ -153,5 +153,5 @@ texture unit->fs texture变量: 映射
 
 ## opengl 参考资料
 
-https://antongerdelan.net/opengl/index.html#onlinetuts
-
+1. https://antongerdelan.net/opengl/index.html#onlinetuts1.
+2. GLSL各版本区别：https://blog.51cto.com/u_11207102/3275866

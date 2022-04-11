@@ -263,3 +263,34 @@ async fn main(){
 
     
 
+19. Rust cargo run 编译时，附加 **features** 参数
+
+    ```rust
+    run --features "sdl_window  DX11"
+    ```
+
+    
+
+20. Rust消除警告
+
+    ```Rust
+    #![allow(dead_code)]
+    #![allow(unused_variables)]
+    #![allow(overflowing_literals)]
+    #![allow(non_snake_case)]
+    #![allow(non_camel_case_types)]
+    #![allow(unused_imports)]
+    ```
+
+    
+
+21. Cargo 链接 dll 库
+
+    ```rust
+    // 指定库寻找目录
+    println!("cargo:rustc-link-search={}", Path::new(&dir).join("src/render/lib").display());
+    // 链接库
+    println!("cargo:rustc-link-lib={}={}", mode, lib);
+    ```
+
+    
