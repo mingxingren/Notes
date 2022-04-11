@@ -202,3 +202,7 @@ m_device_context->CopySubresourceRegion(
 
 通过这些更改，我可以放心的告别那些 `av_hwframe_transfer_data()`和 `sws_scale()`这些函数，并且终于，向完全集成的FFmpeg-DirectX11视频播放器问好。
 
+
+
+注: 翻译这篇博文是因为它有一个很好处理思路和完整的参考代码实例。但是可能并没有到极致，因为 ffmpeg 解码出来的纹理并不能直接用于管线，需要经过 `ID3D11DeviceContext::CopySubresourceRegion` 进行拷贝。我认为可以通过自定义 `AVD3D11VAFramesContext` 和 `AVHWFramesContext`，可以改变纹理属性从而直接用于管线。
+
