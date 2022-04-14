@@ -243,3 +243,11 @@ typedef union SDL_Event
 -static -static-libgcc -static-libstdc++
 ```
 
+
+
+13. MSVC 编译器编译的程序 依赖 MSVCXXX.dll 等 Windows 系统运行库.  如果不想依赖, `代码生成` 选项使用 `\MT`.  CMake 构建下添加如下脚本:
+
+```cmake
+set_property(TARGET d3d9_render PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+```
+
