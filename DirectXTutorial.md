@@ -4,7 +4,6 @@
 
 ```flow
 start=>start: 开始
-end=>end: 结束
 op1=>operation: 创建 D3D11Device
 op2=>operation: 创建 D3D11Swapchain
 op3=>operation: 创建纹理 D3D11Texture
@@ -15,6 +14,7 @@ op7=>operation: 创建 shader 字节码
 op8=>operation: 创建 Vertex shader 对象 CreateVertexShader
 op9=>operation: 创建 输入布局 CreateInputLayout
 op10=>operation: 创建 Pixel shader 对象 CreatePixelShader
+end=>end: 结束
 
 start->op1->op2->op3->op4->op5->op6->op7->op9->op10->end
 ```
