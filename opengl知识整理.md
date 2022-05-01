@@ -4,15 +4,11 @@
 
 ![image-01](https://raw.githubusercontent.com/mingxingren/Notes/master/resource/photo/image-2021123001.png)
 
-
-
 ### 顶点着色器的坐标系统
 
 顶点着色器的坐标很有意思,  它使用 -1 和 1表示坐标系轴方向上的负边界和正边界.  仔细想想确实应该如此，假使我们想渲染的一块区域的大小是 10x10大小的矩形，那么边界就是 -5 ~ 5，当区域是20x20时，边界便改为 -10~10. 我猜如果以确定边界绘制左边代码便不具有普适性，这个矩形尺寸调整一下，那个矩形尺寸调整一下. 所以统一用 -1 和 1表示边界值, 中间值乘以系数表示其他坐标点，这样就不用受到渲染矩形区域大小的影响.
 
 ![image-01](https://github.com/mingxingren/Notes/raw/master/resource/photo/image-2021120501.png)
-
-
 
 着色器（**Shader**）是运行在GPU上的小程序，这些小程序为图形渲染管线的某个特定部分而运行。使用一种叫 **GLSL** 的类C语言写成，一个典型的着色器有下面的结构
 
@@ -34,8 +30,6 @@ int main()
 }
 ```
 
-
-
 ### 着色器数据输入
 
 CPU数据通过OpenGL缓冲区发送到GPU
@@ -44,15 +38,9 @@ CPU数据通过OpenGL缓冲区发送到GPU
 
 #### [glsl支持的数据类型](https://github.com/qyvlik/GLSL.qml/blob/master/glsl/GLSL%E5%8F%98%E9%87%8F%E5%92%8C%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.md)
 
-
-
-
-
 ## 双缓冲
 
 应用程序使用单缓冲绘图时可能会存在图像闪烁的问题。 这是因为生成的图像不是一下子被绘制出来的，而是按照从左到右，由上而下逐像素地绘制而成的。最终图像不是在瞬间显示给用户，而是通过一步一步生成的，这会导致渲染的结果很不真实。为了规避这些问题，我们应用双缓冲渲染窗口应用程序。**前**缓冲保存着最终输出的图像，它会在屏幕上显示；而所有的的渲染指令都会在**后**缓冲上绘制。当所有的渲染指令执行完毕后，我们**交换**(Swap)前缓冲和后缓冲，这样图像就立即呈显出来，之前提到的不真实感就消除了。
-
-
 
 ## OpenGL 调用流程
 
@@ -90,7 +78,7 @@ cond(no)->op_6->e
 ```
 
 3. 申请顶点队列对象(VAO)、顶点缓冲对象(VBO)、索引缓冲对象(EBO), 细节参考: (https://blog.csdn.net/xiji333/article/details/114934590)
-
+   
    ```flow
    st=>start: Start
    op_1=>operation: glGenVertexArrays 申请顶点队列对象(VAO)
@@ -103,11 +91,11 @@ cond(no)->op_6->e
    e=>end: End
    st->op_1->op_2->op_3->op_4->op_5->op_6->op_7->e
    ```
-
-   ​	注：顶点缓冲区使用步骤：
-
-   ​	
-
+   
+   ​    注：顶点缓冲区使用步骤：
+   
+   ​    
+   
    ```flow
    st=>start: Start
    op_1=>operation: 获取缓冲区标识: glGenBuffers(GLsizei n, GLuint* buffers);
@@ -119,10 +107,8 @@ cond(no)->op_6->e
    st->op_1->op_2->op_3->op_4->op_5->e
    ```
 
+4. 使用 texture(纹理) 流程
    
-
-   4. 使用 texture(纹理) 流程
-
    ```flow
    st=>start: Start
    op_1=>operation: glGenTextures 申请 texture 对象
@@ -149,9 +135,138 @@ texture unit->fs texture变量: 映射
 
 注:  glActiveTexture 激活纹理单元后，调用 glBindTexture 会将 纹理绑定到纹理单元，此时如果再调用 glBindTexture 去操作其他纹理，那当前活跃的纹理单元就绑定为其他的纹理。故在要使用纹理的时候，一定要先 glActiveTexture 然后再 glBindTexture 。
 
-
-
 ## opengl 参考资料
 
 1. https://antongerdelan.net/opengl/index.html#onlinetuts1.
 2. GLSL各版本区别：https://blog.51cto.com/u_11207102/3275866
+
+## 片段着色器变量
+
+```中文
+gl_FragCoord: 记录顶点在窗体的实际坐标, x和y分量是片段的窗口空间(Window-space)坐标, 原点为窗口左下角
+
+gl_FrontFacing: 当不启用面剔除 (GL_FACE_CULL), gl_FrontFacing 将会告诉我们当前片段是属于正向面的一部分还是背向面的一部分
+
+gl_FragDepth: 可以设置的当前片段的深度值, 如果着色器没有写入值到gl_FragDepth，它会自动取用gl_FragCoord.z的值
+```
+
+## 接口块
+
+接口块的声明和 `struct` 的声明有点想象，不同的是，现在 根据它是一个输入还是输出块(Block), 使用 `in` 和 `out` 关键字来定义
+
+```glsl
+// vertex shader
+#version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec2 aTexCoords;
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
+out VS_OUT
+{
+    vec2 TexCoords;
+} vs_out;
+
+void main()
+{
+    gl_Position = projection * view * model * vec4(aPos, 1.0);    
+    vs_out.TexCoords = aTexCoords;
+}  
+
+
+// Pixel shader
+#version 330 core
+out vec4 FragColor;
+
+in VS_OUT
+{
+    vec2 TexCoords;
+} fs_in;
+
+uniform sampler2D texture;
+
+void main()
+{             
+    FragColor = texture(texture, fs_in.TexCoords);   
+}
+```
+
+## uniform 缓冲对象
+
+```glsl
+#version 330 core
+layout (location = 0) in vec3 aPos;
+
+layout (std140) uniform Matrices
+{
+    mat4 projection;
+    mat4 view;
+};
+
+uniform mat4 model;
+
+void main()
+{
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
+}
+```
+
+uniform buffer object 比 独立的uniform的好处:
+
+① 一次设置很多 uniform会比一个一个设置要快很多
+
+② 可以同时修改多个 shader程序中的 uniform 变量
+
+③ 如果使用Uniform缓冲对象的话，你可以在着色器中使用更多的uniform。OpenGL限制了它能够处理的uniform数量，这可以通过GL_MAX_VERTEX_UNIFORM_COMPONENTS来查询
+
+
+
+## 几何着色器
+
+几何着色器的输入是一个的图元(如点或者三角形)的一组顶点, 可以在顶点发送到下一个着色器阶段之前对他们随意变换.
+
+
+
+## 实例化
+
+在需要渲染大量物体时, 非常消耗性能. 与绘制顶点本身相比，使用 `glDrawArrays`和 `glDrawElements` 函数告诉GPU去绘制你的顶点数据会消耗更多的性能, 因为 OpenGL 绘制顶点数据前需要做很多工作(比如告诉GPU该从哪个缓冲读取数据, 从哪寻找顶点数据属性,  而且这些都是在相对缓慢的CPU到GPU总线上进行的). 
+
+而实例化能够降数据一次性发给GPU, 然后使用一个绘制函数让OpenGL利用这些数据绘制多个物体.
+
+```c
+/**
+* glDrawArraysInstanced 绘画多个一组顶点的实例
+* @param mode 指出要画的基本形状
+* @param first 顶点数据起点
+* @param count 基本形状需要使用的顶点数据
+* @param instancecount 要绘画的实例数量
+*/
+void glDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
+
+/**
+* glDrawElementsInstanced 绘画多个元素集合形式的实例
+* @param mode 指出要画的基本形状
+* @param count 表示一个实例需要的元素数量
+* @param type 元素类型
+* @param indices 元素起始位置
+* @param instancecount 实例数量
+*/
+void glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void * indices, GLsizei instancecount);
+```
+
+
+
+## 实例化数组
+
+定义为一个顶点属性(能够让我们存储更多的数据), 仅在顶点着色器渲染一个新的实例时才会更新
+
+```c
+/**
+* glVertexAttribDivisor 修改实例化渲染时通用顶点数据更新速度
+* @param index 输入顶点的index
+* @param divisor 除数, 描述每渲染几个实例顶点数据更新成下一个, 为 0 时表示每一个顶点都会更新数据而不是每个实例
+*/
+void glVertexAttribDivisor(GLuint index,GLuint divisor);
+```

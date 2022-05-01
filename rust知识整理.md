@@ -293,4 +293,23 @@ async fn main(){
     println!("cargo:rustc-link-lib={}={}", mode, lib);
     ```
 
-    
+
+
+
+22. rust 导出 C 标准函数
+
+```toml
+# Cargo.toml
+[lib]
+crate-type = ["cdylib"]
+```
+
+```rust
+// 带有 #[no_mangle]属性的函数, rust编译器不会为它进行函数名混淆
+#[no_mangle]
+pub extern "C" fn test_func(a: u32, b: u32) {
+    let c = a + b;
+    println!("print in rust, sum is: {}", c);
+}
+```
+
