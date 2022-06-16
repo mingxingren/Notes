@@ -221,13 +221,9 @@ uniform buffer object 比 独立的uniform的好处:
 
 ③ 如果使用Uniform缓冲对象的话，你可以在着色器中使用更多的uniform。OpenGL限制了它能够处理的uniform数量，这可以通过GL_MAX_VERTEX_UNIFORM_COMPONENTS来查询
 
-
-
 ## 几何着色器
 
 几何着色器的输入是一个的图元(如点或者三角形)的一组顶点, 可以在顶点发送到下一个着色器阶段之前对他们随意变换.
-
-
 
 ## 实例化
 
@@ -256,8 +252,6 @@ void glDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei inst
 void glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void * indices, GLsizei instancecount);
 ```
 
-
-
 ## 实例化数组
 
 定义为一个顶点属性(能够让我们存储更多的数据), 仅在顶点着色器渲染一个新的实例时才会更新
@@ -270,3 +264,49 @@ void glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void
 */
 void glVertexAttribDivisor(GLuint index,GLuint divisor);
 ```
+
+## 抗锯齿
+
+### 多重采样
+
+注: 多重采样在 OpenGL 中默认开启
+
+### 自定义抗锯齿算法
+
+将一个多重采样的纹理图像不进行还原直接传入着色器. `GLSL` 能对纹理图像的每个子样本进行采样 , 所以我们可以创建我们自己的抗锯齿算法. 在大型的图形应用中通常都会这么做.
+
+```glsl
+uniform sampler2DMS screenTextureMS;
+...
+vec4 colorSample = texelFetch(screenTextureMS, TexCoords, 3);  // 第4个子样本
+```
+
+## 向量算法
+
+减法： 向量 AB 方向为 A点指向B点，向量 AB = 点A - 点B
+
+## LookAt 矩阵
+
+使用 3 个相互垂直 (或非线性) 的轴定义了一个坐标空间. 你可以用这个三个轴外加一个平移向量来创建一个矩阵, 并且你可以用这个矩阵乘以任何向量来将其变换到那个坐标系.
+
+## 裁剪空间
+
+在一个顶点着色器运行的最后, `OpenGL`期望所有的坐标都能落在一个特定的范围, 且任何在这个范围之外的点都应该被裁剪掉. 被裁剪掉的坐标就会被忽略, 所以剩下的坐标就将变为屏幕上可见的片段. 这也是`裁剪空间` 名字的由来.
+
+因为将所有可见的坐标都指定在 `-1.0` 到 `1.0` 的范围内不是很直观,  所以我们会指定自己的坐标集(Coordinate Set) 并将它变换回标准化设备坐标系, 就像`OpenGL` 期望的那样.
+
+为了将顶点坐标从观察变换到裁剪空间, 我们需要定义一个投影矩阵(Projection Matrix), 它指定了一个范围的坐标, 比如在每个维度上的`-1000`到`1000`. 投影矩阵接着会将在这个指定的范围内的坐标变换为标准化设备坐标系的范围 `(-1.0, 1.0)`. 所有在范围外的坐标不会被映射到`-1.0`到 `1.0`的范围之间, 所以会被裁剪掉. 在上面这个投影矩阵所指定的范围内, 坐标`(1250, 500, 750)`将是不可见的, 这是由于它的`x`坐标超出了范围, 它被转化为一个大于`1.0`的标准化设备坐标, 所以被裁剪掉了.
+
+由投影矩阵创建的`观察箱(Viewing Box)`被称为`平截头体(Frustum)`, 每个出现在平截头体范围内的坐标都会最终出现在用户屏幕上, 将特定范围内的坐标转化到标准化设备坐标系的过程(而且它很容易被映射到2D观察空间坐标) 被称之为投影(Projection), 因此使用投影矩阵能将3D坐标投影(Project)到很容易映射到2D的标准化设备坐标系中.
+
+一旦所有的顶点被变换到裁剪空间, 最终的操作——`透视除法(Perspective Division)`将会执行, 在这个过程中我们将位置向量的下x, y, z分量分别处以向量的齐次w分量; 透视除法是将4D裁剪空间坐标变换为3D标准化设备坐标的过程. 这一步会在每一个顶点着色器运行的最后被自动执行.
+
+在这一阶段之后, 最后的坐标将会被映射到屏幕空间中(使用glViewport中的设定), 并被变换成片段.
+
+将观察坐标变换为裁剪坐标的投影矩阵可以为两种不同的形式, 每种形式都定义了不同的平截头体. 我们可以选择创建一个`正射投影矩阵(Orthographic Projection Matrix)`或一个`透视投影矩阵(Perspective Projection Matrix)`.
+
+## 投影矩阵
+
+## 欧拉角
+
+欧拉角(Euler Angle)是可以表示3D空间中旋转的3个值, 由莱昂哈德·欧拉(Leonhard·Euler)在18世纪提出. 一共有3种欧拉角:` 俯仰角(Pitch)`、`偏航角(Yaw)`和`滚转角(Roll)`.
