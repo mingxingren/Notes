@@ -247,3 +247,17 @@ endif()
  
 
 16. Linux 编译链接三方库时，需要警惕系统库里是否同样有这个库，如果存在可能会导致在程序编译的时候真正链接的是系统路径的库而不是那我们真正想要的库。比较直接的链接方式是：使用 ldd 命令查看程序依赖那些动态库
+    
+    
+
+ 17. CMake 添加 WinMain 作为程序入口, 需要在 add_executable 命令中加入 WIN32 命令
+
+
+
+18.  windows 系统下使用命令行 `cmd` 启动 `win32` 程序， 可以使用以下代码使程序的输入输出重定向到父程序也就是 `cmd` 的输入输出.
+
+```cpp
+AttachConsole(ATTACH_PARENT_PROCESS); // 将当前程序附着到父进程上，因为是从控制台启动的，所以当前程序的父进程就是那个控制台。 
+freopen("CONIN$", "r+t", stdin); // 重定向 STDIN 
+freopen("CONOUT$", "w+t", stdout); // 重定向STDOUT
+```
